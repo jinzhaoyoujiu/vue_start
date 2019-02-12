@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 
 <head>
+    <meta charset="utf-8">
     <title>vue_start</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
@@ -12,31 +13,117 @@
         <span v-bind:title="a" v-if="b">
             鼠标悬停试试
         </span>
+        <span title="yui">hui</span>
         <span v-for="item in items">{{item.name}}</span>
         <li v-for="item in items">{{item.name}}</li>
         <p v-for="item in items">{{item.name}}</p>
         <button v-on:click="changeM"></button>
+        <input v-once v-model="m" />
+        <onecomp v-bind:property_one='a' v-for="item in items" v-bind:item='item' v-bind:key="item.id"
+            :new_name="onecompNewName" :iiii="getNewa" class="three four" v-bind:class="{six:b}">
+        </onecomp>
+        <two-comp v-on:click="m='678y'"></two-comp>
+        <span v-on:click="m = 'baz'">Change it</span>
+        <p v-html="aHTML"></p>
+        <button disabled="false">按钮</button>
+        <button disabled=null>按钮</button>
+        <button disabled=false>按钮</button>
+        <button disabled=undifined>按钮</button>
+        <button v-bind:disabled="e">按钮</button>
+        <p v-bind:class="{one:b,'two':b}" class="uiii" :style="{color:style.color.red}">classssss</p>
+        <p v-bind:class="uu" class="uiii" :style="oneTypeStyle">classssss</p>
+        <p v-bind:class="className" class="uiii" :style="[twoTypeStyle,oneTypeStyle]">classssss</p>
+        <p v-bind:class="[b?classNames.one:'',classNames.two,{three:b}]">classssss</p>
+        <div :style="{display:['-webkit-box','-ms-flexbox','flex']}"></div>
+        <div v-if="!b">uuuuu</div>
+        <div v-else>iiii</div>
+        <template v-if="!b">
+            <p>erty</p>
+            <h1>r</h1>
+        </template>
     </div>
 
     <script>
+        Vue.component('onecomp',
+            {
+                props: ['property_one', 'item', 'new_name', 'iiii'],
+                template: "<p class='one two'>{{ property_one }} ----{{item.name}}??? {{String(property_one).split('').join('i')}} {{new_name}} {{iiii()}}</p>"
+
+            });
+        Vue.component('two-comp', {
+            template: '<span>hhhh</span>'
+        });
+        var mData = {
+            m: "haha",
+            a: "hehe",
+            b: true,
+            items: [
+                { name: 'qq', id: 5 },
+                { name: 'ww', id: 2 },
+                { name: 'ee', id: 3 }],
+            d: { name: 'zhangsan' },
+            aHTML: '<span style="color:red;">aaaaa</span>',
+            e: null,
+            // now:function(){ return Date.now(); }
+            uu: { one: true, 'two': true },
+            classNames: {
+                one: 'one',
+                two: 'two'
+            },
+            style: {
+                color: {
+                    red: 'red'
+                }
+            },
+            oneTypeStyle: {
+                color: 'red',
+                'font-size': '8px'
+            },
+            twoTypeStyle: {
+                'font-size': '18px',
+                transform: 'rotate(7deg)'
+            }
+        };
+        // Object.freeze(mData);
+        function printM() {
+            console.log(this.m);
+        }
+        var computedData = {
+            onecompNewName: {
+                get: function () { return String(mData.a).split('').reverse().join(''); },
+                set: function (newValue) { mData.a = String(newValue).split('').reverse().join(''); }
+            },
+            // onecompNewName: function(){ return Date.now(); }
+            className: function () {
+                return {
+                    one: this.b,
+                    'two': this.b
+                };
+            }
+        };
         var app = new Vue({
             el: '#app',
-            data: {
-                m: "haha",
-                a: "hehe",
-                b: true,
-                items: [
-                    { name: 'qq' },
-                    { name: 'ww' },
-                    { name: 'ee' }]
-                
+            data: mData,
+            computed: computedData,
+            methods: {
+                changeM: function () {
+                    this.m = this.m.toUpperCase();
+                    this.m = String(this.m).split('').reverse().join('');
+                    this.a = 'pppp';
+                    this.onecompNewName = "hangzhou";
+                },
+                getNewa: function () { return String(mData.a).split('').join('i'); }
             },
-            methods:{
-                changeM:function(){
-                    this.m=this.m.toUpperCase();
-                }
-            }
+            created: printM
         });
+        console.log(app.$el);
+        console.log(app.$data);
+        console.log(app.$watch('m'));
+        app.$watch('m', function (a, b) {
+            console.log(a, b);
+        });
+
+
     </script>
 </body>
 
