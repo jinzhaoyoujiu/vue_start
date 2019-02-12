@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>vue_start</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{ m }}
+        <span v-bind:title="a" v-if="b">
+            鼠标悬停试试
+        </span>
+        <span v-for="item in items">{{item.name}}</span>
+        <li v-for="item in items">{{item.name}}</li>
+        <p v-for="item in items">{{item.name}}</p>
+        <button v-on:click="changeM"></button>
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                m: "haha",
+                a: "hehe",
+                b: true,
+                items: [
+                    { name: 'qq' },
+                    { name: 'ww' },
+                    { name: 'ee' }]
+                
+            },
+            methods:{
+                changeM:function(){
+                    this.m=this.m.toUpperCase();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
